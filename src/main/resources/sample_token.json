@@ -1,0 +1,8 @@
+{
+    "api_key": "YOUR TWITTER API KEY",
+    "api_secret": "YOUR TWITTER API SECRET",
+    "access_token": "YOUR TWITTER ACCESS TOKEN",
+    "access_secret": "YOUR TWITTER ACCESS SECRET",
+    "quandl_key": "YOUR QUANDL API KEY",
+    "spark_loc": "/YOUR PATH/spark-2.4.4-bin-hadoop2.7"
+}
