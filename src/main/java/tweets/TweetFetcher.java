@@ -34,26 +34,26 @@ public class TweetFetcher {
         return twitter;
     }
 
-    public JsonArray tweetsList() {
+    public String tweetsList() {
         String queryStr = tweetQueryBuilder(twitterAccounts);
         Twitter twitter = twitterInstance();
         Query query = new Query();
         query.count(100).setLang("en");
         query.setQuery(queryStr);
-        JsonArray tweetsJson = null;
+        String tweetRsltStr = null;
         try {
             QueryResult result = twitter.search(query);
             List<Status> statuses = result.getTweets();
             Gson gson = new Gson();
             String tweets = gson.toJson(statuses);
-            tweetsJson = (JsonArray) new JsonParser().parse(tweets);
-//            JsonObject tweetWrapped = new JsonObject();
-//            tweetWrapped.add("tweets", tweetsJson);
-//            tweetRsltStr = tweetWrapped.toString();
+            JsonArray tweetsJson = (JsonArray) new JsonParser().parse(tweets);
+            JsonObject tweetWrapped = new JsonObject();
+            tweetWrapped.add("tweets", tweetsJson);
+            tweetRsltStr = tweetWrapped.toString();
         } catch (TwitterException e) {
             //ToDo
         }
-        return tweetsJson;
+        return tweetRsltStr;
     }
 
     public static String tweetQueryBuilder(ArrayList<String> twitterAccounts) {

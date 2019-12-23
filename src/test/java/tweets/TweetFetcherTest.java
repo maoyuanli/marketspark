@@ -17,9 +17,8 @@ class TweetFetcherTest {
     @Test
     void tweetsList() {
         TweetFetcher tweetFetcher = new TweetFetcher(new ArrayList<String>( Arrays.asList("realdonaldTrump") ));
-        JsonArray trumpTweets = tweetFetcher.tweetsList();
+        String trumpTweets = tweetFetcher.tweetsList();
         System.out.println(trumpTweets);
-        System.out.println(trumpTweets.size());
     }
 
     @Test
