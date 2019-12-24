@@ -3,9 +3,15 @@ package tweets;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.expressions.UserDefinedFunction;
+import org.apache.spark.sql.types.DataTypes;
+import tmutils.SentimentAnalyzer;
 
 
 import java.util.ArrayList;
+
+import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.udf;
 
 public class TweetSparker {
 
@@ -21,7 +27,11 @@ public class TweetSparker {
         TweetFetcher tweetFetcher = new TweetFetcher(this.twitterAccounts);
         ArrayList<TweetElement> trumpTweets = tweetFetcher.tweetsList();
         Dataset<Row> df = this.sparkSession.createDataFrame(trumpTweets, TweetElement.class);
-        return df;
+        Dataset<Row>dfWithDate = df.withColumn("date",col("createdAt").cast(DataTypes.DateType));
+        SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
+        UserDefinedFunction udfGetSentment = udf((String text) -> sentimentAnalyzer.getSentment(text), DataTypes.IntegerType);
+        Dataset<Row> dfWithSent = dfWithDate.select(col("date"),col("user"),col("text"),udfGetSentment.apply(col("text")).alias("sentiment"));
+        return dfWithSent;
     }
 
 }

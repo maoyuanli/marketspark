@@ -1,6 +1,5 @@
 package tweets;
 
-import com.google.gson.*;
 import tmutils.TokenFetcher;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -38,14 +37,12 @@ public class TweetFetcher {
         String queryStr = tweetQueryBuilder(twitterAccounts);
         Twitter twitter = twitterInstance();
         Query query = new Query();
-        query.count(100).setLang("en");
+        query.count(200).setLang("en");
         query.setQuery(queryStr);
-        String tweetRsltStr = null;
         ArrayList<TweetElement> tweetElements = new ArrayList<>();
         try {
             QueryResult result = twitter.search(query);
             List<Status> statuses = result.getTweets();
-            Gson gson = new Gson();
             for(Status status:statuses){
                 Date dateCreatedAt = status.getCreatedAt();
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
