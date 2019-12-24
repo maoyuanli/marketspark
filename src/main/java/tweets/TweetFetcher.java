@@ -64,12 +64,11 @@ public class TweetFetcher {
         String fromPrefix = "FROM:";
         String orPrefix = " OR ";
         StringBuilder query = new StringBuilder();
-        ArrayList<String> sources = twitterAccounts;
-        for (int i = 0; i < sources.size(); i++) {
-            if (!(i == sources.size() - 1)) {
-                query.append(fromPrefix).append(sources.get(i)).append(orPrefix);
+        for (int i = 0; i < twitterAccounts.size(); i++) {
+            if (!(i == twitterAccounts.size() - 1)) {
+                query.append(fromPrefix).append(twitterAccounts.get(i)).append(orPrefix);
             } else {
-                query.append(fromPrefix).append(sources.get(i));
+                query.append(fromPrefix).append(twitterAccounts.get(i));
             }
         }
 

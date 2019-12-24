@@ -21,7 +21,7 @@ public class SentimentAnalyzer {
         props.setProperty("annotators", "tokenize, ssplit, parse, sentiment");
         pipeline = new StanfordCoreNLP(props);
     }
-    public int getSentment(String content) {
+    public <T> T getSentment(String content, Boolean getIntScore) {
             SentimentAnalyzer.init();
             int mainSentiment = 0;
             if (content != null && content.length() > 0) {
@@ -40,21 +40,26 @@ public class SentimentAnalyzer {
 
                 }
             }
-            return mainSentiment;
-//        switch (mainSentiment) {
-//            case 0:
-//                return "Very Negative";
-//            case 1:
-//                return "Negative";
-//            case 2:
-//                return "Neutral";
-//            case 3:
-//                return "Positive";
-//            case 4:
-//                return "Very Positive";
-//            default:
-//                return "";
-//        }
+            if(getIntScore == true){
+                return (T) Integer.valueOf(mainSentiment);
+            }else {
+                switch (mainSentiment) {
+                    case 0:
+                        return (T) "Very Negative";
+                    case 1:
+                        return (T) "Negative";
+                    case 2:
+                        return (T) "Neutral";
+                    case 3:
+                        return (T) "Positive";
+                    case 4:
+                        return (T) "Very Positive";
+                    default:
+                        return (T) "";
+                }
+            }
+
+
         }
     }
 
