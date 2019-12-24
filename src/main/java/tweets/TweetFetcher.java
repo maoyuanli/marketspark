@@ -56,11 +56,6 @@ public class TweetFetcher {
                 tweetElements.add(tweetElement);
             }
 
-//            String tweets = gson.toJson(statuses);
-//            JsonArray tweetsJson = (JsonArray) new JsonParser().parse(tweets);
-//            JsonObject tweetWrapped = new JsonObject();
-//            tweetWrapped.add("tweets", tweetsJson);
-//            tweetRsltStr = tweetWrapped.toString();
         } catch (TwitterException e) {
             //ToDo
         }
