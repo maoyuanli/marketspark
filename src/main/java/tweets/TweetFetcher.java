@@ -1,14 +1,14 @@
 package tweets;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import tmutils.TokenFetcher;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,26 +34,37 @@ public class TweetFetcher {
         return twitter;
     }
 
-    public String tweetsList() {
+    public ArrayList<TweetElement> tweetsList() {
         String queryStr = tweetQueryBuilder(twitterAccounts);
         Twitter twitter = twitterInstance();
         Query query = new Query();
         query.count(100).setLang("en");
         query.setQuery(queryStr);
         String tweetRsltStr = null;
+        ArrayList<TweetElement> tweetElements = new ArrayList<>();
         try {
             QueryResult result = twitter.search(query);
             List<Status> statuses = result.getTweets();
             Gson gson = new Gson();
-            String tweets = gson.toJson(statuses);
-            JsonArray tweetsJson = (JsonArray) new JsonParser().parse(tweets);
-            JsonObject tweetWrapped = new JsonObject();
-            tweetWrapped.add("tweets", tweetsJson);
-            tweetRsltStr = tweetWrapped.toString();
+            for(Status status:statuses){
+                Date dateCreatedAt = status.getCreatedAt();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String createdAt = dateFormat.format(dateCreatedAt);
+                String user = status.getUser().getName();
+                String text = status.getText();
+                TweetElement tweetElement = new TweetElement(user,createdAt,text);
+                tweetElements.add(tweetElement);
+            }
+
+//            String tweets = gson.toJson(statuses);
+//            JsonArray tweetsJson = (JsonArray) new JsonParser().parse(tweets);
+//            JsonObject tweetWrapped = new JsonObject();
+//            tweetWrapped.add("tweets", tweetsJson);
+//            tweetRsltStr = tweetWrapped.toString();
         } catch (TwitterException e) {
             //ToDo
         }
-        return tweetRsltStr;
+        return tweetElements;
     }
 
     public static String tweetQueryBuilder(ArrayList<String> twitterAccounts) {

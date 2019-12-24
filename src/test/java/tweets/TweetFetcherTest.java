@@ -1,6 +1,7 @@
 package tweets;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ class TweetFetcherTest {
     @Test
     void tweetsList() {
         TweetFetcher tweetFetcher = new TweetFetcher(new ArrayList<String>( Arrays.asList("realdonaldTrump") ));
-        String trumpTweets = tweetFetcher.tweetsList();
+        ArrayList<TweetElement> trumpTweets = tweetFetcher.tweetsList();
         System.out.println(trumpTweets);
     }
 
