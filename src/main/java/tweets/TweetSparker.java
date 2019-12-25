@@ -16,10 +16,11 @@ import static org.apache.spark.sql.functions.udf;
 public class TweetSparker {
 
     private ArrayList<String> twitterAccounts;
-    private SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
+    private SparkSession sparkSession;
 
-    public TweetSparker(ArrayList<String> twitterAccounts) {
+    public TweetSparker(ArrayList<String> twitterAccounts, SparkSession sparkSession) {
         this.twitterAccounts = twitterAccounts;
+        this.sparkSession = sparkSession;
     }
 
 
