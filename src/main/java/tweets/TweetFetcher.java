@@ -54,7 +54,7 @@ public class TweetFetcher {
             }
 
         } catch (TwitterException e) {
-            //ToDo
+            throw new RuntimeException(e);
         }
         return tweetElements;
     }

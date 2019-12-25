@@ -48,7 +48,7 @@ public class SentimentAnalyzer implements Serializable {
 
             }
         }
-        if (getIntScore == true) {
+        if (getIntScore) {
             return (T) Integer.valueOf(mainSentiment);
         } else {
             switch (mainSentiment) {
@@ -70,13 +70,12 @@ public class SentimentAnalyzer implements Serializable {
 
     public UserDefinedFunction getSentimentUDF(Boolean getIntType){
         DataType sparkDataType;
-        if(getIntType==true){
+        if(getIntType){
             sparkDataType = DataTypes.IntegerType;}
         else{
             sparkDataType = DataTypes.StringType;
         }
-        UserDefinedFunction udfGetSentment = udf((String text) -> this.getSentment(text,getIntType), sparkDataType);
-        return udfGetSentment;
+        return udf((String text) -> this.getSentment(text,getIntType), sparkDataType);
     }
 }
 

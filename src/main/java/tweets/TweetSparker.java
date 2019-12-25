@@ -26,10 +26,10 @@ public class TweetSparker {
         TweetFetcher tweetFetcher = new TweetFetcher(this.twitterAccounts);
         ArrayList<TweetElement> trumpTweets = tweetFetcher.tweetsList();
         Dataset<Row> df = this.sparkSession.createDataFrame(trumpTweets, TweetElement.class);
-        Dataset<Row>dfWithDate = df.withColumn("date",col("createdAt").cast(DataTypes.DateType));
+        Dataset<Row> dfWithDate = df.withColumn("date", col("createdAt").cast(DataTypes.DateType));
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
         UserDefinedFunction getSentiment = sentimentAnalyzer.getSentimentUDF(getIntSentimentScore);
-        return dfWithDate.select(col("date"),col("user"),col("text"),getSentiment.apply(col("text")).alias("sentiment"));
+        return dfWithDate.select(col("date"), col("user"), col("text"), getSentiment.apply(col("text")).alias("sentiment"));
     }
 
 }
