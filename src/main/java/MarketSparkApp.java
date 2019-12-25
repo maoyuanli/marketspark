@@ -3,6 +3,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
+import org.apache.spark.sql.types.DataTypes;
 import tmutils.SentimentAnalyzer;
 import tweets.TweetSparker;
 
@@ -19,13 +20,23 @@ public class MarketSparkApp {
 
         SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
         sparkSession.sparkContext().setLogLevel("ERROR");
-        TweetSparker trumpSparker = new TweetSparker(new ArrayList<>(Arrays.asList("realDonaldTrump")),sparkSession);
-        Dataset<Row> trumpTweetset = trumpSparker.generateDF(true);
-        TweetSparker mediaSparker = new TweetSparker(new ArrayList<>(Arrays.asList("marketwatch", "wsj", "ft", "business", "theeconomist", "cnbc", "cnn")),sparkSession);
-        Dataset<Row> mediaTweetset = mediaSparker.generateDF(true);
-        Dataset<Row> trumpByDate = trumpTweetset.groupBy(col("date")).agg(avg("sentiment").alias("trump_sentiment"));
-        Dataset<Row> mediaByDate = mediaTweetset.groupBy(col("date")).agg(avg("sentiment").alias("media_sentiment"));
-        trumpByDate.show();
-        mediaByDate.show();
+        SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
+        UserDefinedFunction getSentiment = sentimentAnalyzer.getSentimentUDF(false);
+
+        // Trump
+        TweetSparker trumpSparker = new TweetSparker(new ArrayList<>(Arrays.asList("realDonaldTrump")), sparkSession);
+        Dataset<Row> trumpTweetset = trumpSparker.generateDF(false);
+        Dataset<Row> trumpByDate = trumpTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("textGroup"));
+
+        // Media
+        TweetSparker mediaSparker = new TweetSparker(new ArrayList<>(Arrays.asList("wsj", "ft", "cnbc", "cnn")), sparkSession);
+        Dataset<Row> mediaTweetset = mediaSparker.generateDF(false);
+        Dataset<Row> mediaByDate = mediaTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("textGroup"));
+
+        Dataset<Row> trump = trumpByDate.withColumn("trumpSentiment", getSentiment.apply(col("textGroup"))).orderBy("date");
+        Dataset<Row> media = mediaByDate.withColumn("mediaSentiment", getSentiment.apply(col("textGroup"))).orderBy("date");
+
+        trump.show();
+        media.show();
     }
 }

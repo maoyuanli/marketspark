@@ -12,11 +12,12 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import edu.stanford.nlp.util.logging.RedwoodConfiguration;
 
+import java.io.Serializable;
 import java.util.Properties;
 
 import static org.apache.spark.sql.functions.udf;
 
-public class SentimentAnalyzer {
+public class SentimentAnalyzer implements Serializable {
 
     static StanfordCoreNLP pipeline;
 
