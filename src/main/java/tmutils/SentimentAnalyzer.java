@@ -10,6 +10,7 @@ import edu.stanford.nlp.util.CoreMap;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
+import edu.stanford.nlp.util.logging.RedwoodConfiguration;
 
 import java.util.Properties;
 
@@ -21,6 +22,7 @@ public class SentimentAnalyzer {
 
 
     public static void init() {
+        RedwoodConfiguration.current().clear().apply();
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, parse, sentiment");
         pipeline = new StanfordCoreNLP(props);
