@@ -1,4 +1,4 @@
-package tmutils;
+package com.maotion.utils;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;

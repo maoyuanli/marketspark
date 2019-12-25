@@ -1,8 +1,8 @@
 package tmutils;
 
-import java.util.HashMap;
+import com.maotion.utils.TokenFetcher;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.HashMap;
 
 class TokenFetcherTest {
 

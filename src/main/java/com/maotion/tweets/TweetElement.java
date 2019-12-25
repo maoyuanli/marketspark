@@ -1,4 +1,4 @@
-package tweets;
+package com.maotion.tweets;
 
 public class TweetElement {
     private String user;

@@ -1,4 +1,4 @@
-package tmutils;
+package com.maotion.utils;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;

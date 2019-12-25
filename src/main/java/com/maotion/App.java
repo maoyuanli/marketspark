@@ -1,20 +1,19 @@
+package com.maotion;
 
+import com.maotion.tweets.TweetSparker;
+import com.maotion.utils.SentimentAnalyzer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
-import tmutils.SentimentAnalyzer;
-import tweets.TweetSparker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 import static org.apache.spark.sql.functions.*;
+import static org.apache.spark.sql.functions.col;
 
-
-public class MarketSparkApp {
-
+public class App {
     public static void main(String[] args) {
 
         SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();

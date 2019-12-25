@@ -1,6 +1,6 @@
-package tweets;
+package com.maotion.tweets;
 
-import tmutils.TokenFetcher;
+import com.maotion.utils.TokenFetcher;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 

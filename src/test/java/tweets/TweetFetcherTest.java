@@ -1,13 +1,11 @@
 package tweets;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.maotion.tweets.TweetElement;
+import com.maotion.tweets.TweetFetcher;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TweetFetcherTest {
 

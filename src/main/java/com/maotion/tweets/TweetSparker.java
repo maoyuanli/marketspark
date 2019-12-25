@@ -1,11 +1,11 @@
-package tweets;
+package com.maotion.tweets;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.types.DataTypes;
-import tmutils.SentimentAnalyzer;
+import com.maotion.utils.SentimentAnalyzer;
 
 import java.util.ArrayList;
 
