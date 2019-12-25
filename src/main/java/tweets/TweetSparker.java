@@ -29,8 +29,8 @@ public class TweetSparker {
         Dataset<Row> df = this.sparkSession.createDataFrame(trumpTweets, TweetElement.class);
         Dataset<Row>dfWithDate = df.withColumn("date",col("createdAt").cast(DataTypes.DateType));
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
-        UserDefinedFunction udfGetSentment = udf((String text) -> sentimentAnalyzer.getSentment(text,false), DataTypes.IntegerType);
-        return dfWithDate.select(col("date"),col("user"),col("text"),udfGetSentment.apply(col("text")).alias("sentiment"));
+        UserDefinedFunction getSentiment = sentimentAnalyzer.getSentimentUDF(false);
+        return dfWithDate.select(col("date"),col("user"),col("text"),getSentiment.apply(col("text")).alias("sentiment"));
     }
 
 }
