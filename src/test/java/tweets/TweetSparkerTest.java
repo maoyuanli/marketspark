@@ -17,7 +17,7 @@ class TweetSparkerTest {
     void generateDF() throws IOException {
         SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
         TweetSparker tweetSparker = new TweetSparker(new ArrayList<>(Arrays.asList("realDonaldTrump")),sparkSession);
-        Dataset<Row> df = tweetSparker.generateDF();
+        Dataset<Row> df = tweetSparker.generateDF(true);
         df.show();
         df.printSchema();
     }
