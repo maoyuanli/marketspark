@@ -25,9 +25,8 @@ public class MarketSparkApp {
         Dataset<Row> mediaTweetset = mediaSparker.generateDF(true);
         Dataset<Row> trumpByDate = trumpTweetset.groupBy(col("date")).agg(avg("sentiment").alias("trump_sentiment"));
         Dataset<Row> mediaByDate = mediaTweetset.groupBy(col("date")).agg(avg("sentiment").alias("media_sentiment"));
-        trumpByDate.createOrReplaceTempView("trump");
-        mediaByDate.createOrReplaceTempView("media");
-        Dataset<Row> joined = sparkSession.sql("select t.*, m.media_sentiment from trump t inner join media m on t.date = m.date");
-        joined.printSchema();
+        trumpByDate.show();
+        mediaByDate.show();
+        // works. but need to turn off log, and make join work.
     }
 }
