@@ -14,7 +14,7 @@ import static org.apache.spark.sql.functions.*;
 import static org.apache.spark.sql.functions.col;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
         sparkSession.sparkContext().setLogLevel("ERROR");
@@ -22,17 +22,25 @@ public class App {
         UserDefinedFunction getSentiment = sentimentAnalyzer.getSentimentUDF(false);
 
         // Trump
-        TweetSparker trumpSparker = new TweetSparker(new ArrayList<>(Arrays.asList("realDonaldTrump")), sparkSession);
-        Dataset<Row> trumpTweetset = trumpSparker.generateDF(false);
-        Dataset<Row> trumpByDate = trumpTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("trumpTweets"));
-        Dataset<Row> trump = trumpByDate.withColumn("trumpSentiment", getSentiment.apply(col("trumpTweets"))).sort(col("date").desc());
-        // Media
-        TweetSparker mediaSparker = new TweetSparker(new ArrayList<>(Arrays.asList("wsj", "ft", "cnn")), sparkSession);
-        Dataset<Row> mediaTweetset = mediaSparker.generateDF(false);
-        Dataset<Row> mediaByDate = mediaTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("mediaTweets"));
-        Dataset<Row> media = mediaByDate.withColumn("mediaSentiment", getSentiment.apply(col("mediaTweets"))).sort(col("date").desc());
+        Thread trumpThread = new Thread(() -> {
+            TweetSparker trumpSparker = new TweetSparker(new ArrayList<>(Arrays.asList("realDonaldTrump")), sparkSession);
+            Dataset<Row> trumpTweetset = trumpSparker.generateDF(false);
+            Dataset<Row> trumpByDate = trumpTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("trumpTweets"));
+            Dataset<Row> trump = trumpByDate.withColumn("trumpSentiment", getSentiment.apply(col("trumpTweets"))).sort(col("date").desc());
+            trump.show();
+        });
 
-        trump.show();
-        media.show();
+        // Media
+        Thread mediaThread = new Thread(() -> {
+            TweetSparker mediaSparker = new TweetSparker(new ArrayList<>(Arrays.asList("wsj", "ft", "cnn")), sparkSession);
+            Dataset<Row> mediaTweetset = mediaSparker.generateDF(false);
+            Dataset<Row> mediaByDate = mediaTweetset.groupBy("date").agg(concat_ws(" ", collect_list("text")).alias("mediaTweets"));
+            Dataset<Row> media = mediaByDate.withColumn("mediaSentiment", getSentiment.apply(col("mediaTweets"))).sort(col("date").desc());
+            media.show();
+        });
+
+        trumpThread.start();
+        mediaThread.start();
+
     }
 }
